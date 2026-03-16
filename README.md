@@ -795,4 +795,18 @@ Each directory contains captured evidence confirming the identity platform is op
 
 ---
 
+## Lab Modules
+
+Module 01 — Infrastructure Foundation  
+Module 02 — Active Directory Identity Authority  
+Module 03 — Hybrid Identity Synchronization (Entra Connect)  
+Module 04 — AWS Federation (SAML)  
+Module 05 — Identity Governance  
+Module 06 — Privileged Access Management Design  
+Module 07 — Identity Logging and Security Monitoring (Splunk)  
+Module 08 — Automation & Policy as Code  
+Module 09 — Architecture & Documentation
+
+---
+
 Maintained by: **Edward E. Spence**
