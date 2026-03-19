@@ -1,3 +1,14 @@
+← [Back to Main README](../README.md)
+
+---
+
+![Proxmox](https://img.shields.io/badge/Proxmox-E57000?style=flat\&logo=proxmox\&logoColor=white)
+![Active Directory](https://img.shields.io/badge/Active_Directory-0078D4?style=flat\&logo=microsoft\&logoColor=white)
+![Microsoft Entra ID](https://img.shields.io/badge/Microsoft_Entra_ID-0078D4?style=flat\&logo=microsoftazure\&logoColor=white)
+![PAM](https://img.shields.io/badge/PAM-Privileged_Access-red?style=flat)
+
+---
+
 # Network Architecture - IAM/PAM Lab
 
 ## Network Topology
@@ -137,25 +148,23 @@ This design ensures:
 ## Security Design Principles
 
 * **Network Segmentation**
-  Identity infrastructure is separated from internet-facing services.
+  Identity infrastructure is separated from internet-facing services
 
 * **Least Exposure**
-  Domain controllers and endpoints have zero direct internet access.
+  Domain controllers and endpoints have zero direct internet access
 
 * **Explicit Identity Bridge**
-  ID-SYNC01 is intentionally dual-homed to act as the controlled trust boundary between on-prem AD and cloud identity.
+  ID-SYNC01 is intentionally dual-homed to act as the controlled trust boundary
 
 * **NAT Masquerading**
-  Internal IP space is never directly exposed externally.
+  Internal IP space is never directly exposed externally
 
 * **Defense-in-Depth**
-  Isolation, privilege boundaries, and role separation reduce blast radius in the event of compromise.
+  Isolation, privilege boundaries, and role separation reduce blast radius
 
 ---
 
 **Document Owner:** Edward E. Spence
 **Environment:** Fairmont Manufacturing Identity Security Lab
-**Document Type:** Network Architecture Runbook
+**Document Type:** Architecture Documentation
 **Last Reviewed:** February 2026
-
- 

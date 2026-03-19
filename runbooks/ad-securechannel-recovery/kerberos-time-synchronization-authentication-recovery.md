@@ -1,8 +1,18 @@
+← [Back to Main README](../README.md)
+
+---
+
+![Active Directory](https://img.shields.io/badge/Active_Directory-0078D4?style=flat\&logo=microsoft\&logoColor=white)
+![Kerberos](https://img.shields.io/badge/Kerberos-Authentication-blue?style=flat)
+![Windows Server](https://img.shields.io/badge/Windows_Server_2022-0078D4?style=flat\&logo=windows\&logoColor=white)
+
+---
+
 # Active Directory Authentication Recovery — Secure Channel & Kerberos Time Hierarchy
 
-**Maintained by:** Edward E. Spence  
-**Environment:** Fairmont Manufacturing Identity Security Lab  
-**Document Type:** IAM Operations Runbook  
+**Maintained by:** Edward E. Spence
+**Environment:** Fairmont Manufacturing Identity Security Lab
+**Document Type:** IAM Operations Runbook
 **Last Reviewed:** February 2026
 
 | Field         | Value                           |
@@ -21,7 +31,7 @@
 
 This runbook provides the recovery procedure for domain authentication failures caused by an invalid Kerberos time hierarchy or a broken workstation secure channel.
 
-In Active Directory, Kerberos authentication depends on synchronized time between the domain controller and domain members.  
+In Active Directory, Kerberos authentication depends on synchronized time between the domain controller and domain members.
 The PDC Emulator acts as the domain time authority.
 
 If the PDC Emulator uses the Local CMOS Clock or an unreachable time source, authentication may fail even while the domain controller remains online.
@@ -34,10 +44,10 @@ Use this procedure if domain authentication fails but systems remain powered on 
 
 Common indicators:
 
-• Users cannot log in with valid domain credentials  
-• RDP authentication fails  
-• “Trust relationship between this workstation and the primary domain failed”  
-• Kerberos ticket issuance fails  
+• Users cannot log in with valid domain credentials
+• RDP authentication fails
+• “Trust relationship between this workstation and the primary domain failed”
+• Kerberos ticket issuance fails
 • `Test-ComputerSecureChannel` returns False
 
 ---
@@ -51,6 +61,10 @@ Open elevated PowerShell:
 ```powershell
 Test-ComputerSecureChannel -Verbose
 ```
+
+### Evidence
+
+![Secure Channel Failure](./screenshots/01_securechannel_fail.png)
 
 If the output is:
 
@@ -85,6 +99,10 @@ On DC01:
 netdom query fsmo
 ```
 
+### Evidence
+
+![FSMO Roles](./screenshots/02_fsmo_roles.png)
+
 Confirm DC01 holds the **PDC Emulator** role.
 
 The PDC Emulator is the authoritative time source for the domain.
@@ -98,6 +116,10 @@ On DC01:
 ```powershell
 w32tm /query /source
 ```
+
+### Evidence
+
+![Local CMOS Clock](./screenshots/03_cmos_clock.png)
 
 If the result is:
 
@@ -220,9 +242,9 @@ A `krbtgt` ticket issued by `DC01.IAMPAM.LAB` must appear.
 
 Authentication is restored when:
 
-• Domain login succeeds  
-• `Test-ComputerSecureChannel` returns True  
-• Kerberos tickets are issued  
+• Domain login succeeds
+• `Test-ComputerSecureChannel` returns True
+• Kerberos tickets are issued
 • Trust relationship errors stop
 
 ---
@@ -249,9 +271,9 @@ In Active Directory:
 
 **If time is wrong, authentication is wrong.**
 
-Kerberos is a time-based authentication protocol.  
+Kerberos is a time-based authentication protocol.
 The PDC Emulator must always have a reliable upstream time authority.
 
 ---
 
-End of Runbook
+**E.E. Spence — Identity Engineering | IAMPAM.LAB**

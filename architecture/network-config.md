@@ -1,14 +1,25 @@
+← [Back to Main README](../README.md)
+
+![Proxmox](https://img.shields.io/badge/Proxmox-E57000?style=flat\&logo=proxmox\&logoColor=white)
+![Linux](https://img.shields.io/badge/Ubuntu_22.04-E95420?style=flat\&logo=ubuntu\&logoColor=white)
+![Network](https://img.shields.io/badge/Network-Segmentation-blue?style=flat)
+
+
 # Identity Infrastructure Network Configuration Runbook
+
+**Status:** Complete
+**Review State:** Last Reviewed February 2026
+**Operational State:** Active
 
 ---
 
 ## Network Bridges
 
-| Bridge  | IP Address        | Function                           | NAT         | Operational State |
-| ------- | ----------------- | ---------------------------------- | ----------- | ----------------- |
-| vmbr0   | 192.168.xx.xxx/xx | External network connectivity      | N/A         | Active            |
-| vmbrPAM | 172.31.100.1/24   | Isolated identity services network | No          | Active            |
-| vmbrNAT | 192.168.100.1/24  | Management and update network      | Yes → vmbr0 | Active            |
+| Bridge  | IP Address       | Function                           | NAT         | Operational State |
+| ------- | ---------------- | ---------------------------------- | ----------- | ----------------- |
+| vmbr0   | 192.168.8.100/24 | External network connectivity      | N/A         | Active            |
+| vmbrPAM | 172.31.100.1/24  | Isolated identity services network | No          | Active            |
+| vmbrNAT | 192.168.100.1/24 | Management and update network      | Yes → vmbr0 | Active            |
 
 ---
 
@@ -18,7 +29,7 @@
 
 File: `/etc/sysctl.conf`
 
-```
+```bash
 net.ipv4.ip_forward=1
 ```
 
@@ -46,7 +57,7 @@ cat /proc/sys/net/ipv4/ip_forward
 
 Expected output:
 
-```
+```text
 1
 ```
 
@@ -59,7 +70,7 @@ ip addr show vmbrNAT | grep inet
 
 Expected:
 
-```
+```text
 vmbrPAM returns 172.31.100.1/24
 vmbrNAT returns 192.168.100.1/24
 ```
@@ -72,7 +83,7 @@ iptables -t nat -L POSTROUTING -n | grep MASQUERADE
 
 Expected:
 
-```
+```text
 MASQUERADE  all  --  192.168.100.0/24  0.0.0.0/0
 ```
 
@@ -94,8 +105,7 @@ This structure mirrors enterprise identity environments where authentication inf
 
 ---
 
-Operations Owner: Edward E. Spence
-Environment: Fairmont Manufacturing Identity Security Lab
-Document Type: Network Configuration Runbook
-Last Reviewed: February 2026
-
+**Operations Owner:** Edward E. Spence
+**Environment:** Fairmont Manufacturing Identity Security Lab
+**Document Type:** Network Configuration Runbook
+**Last Reviewed:** February 2026

@@ -1,4 +1,18 @@
+← [Back to Main README](../README.md)
+
+---
+
+![Proxmox](https://img.shields.io/badge/Proxmox-E57000?style=flat\&logo=proxmox\&logoColor=white)
+![Windows Server](https://img.shields.io/badge/Windows_Server_2022-0078D4?style=flat\&logo=windows\&logoColor=white)
+![Ubuntu](https://img.shields.io/badge/Ubuntu_22.04-E95420?style=flat\&logo=ubuntu\&logoColor=white)
+
+---
+
 # Identity Infrastructure Addressing Plan
+
+**Status:** ✅ Active | **Last Reviewed:** February 2026
+
+This document defines the network addressing, VM inventory, snapshot register, and security design rationale for the IAMPAM.LAB environment.
 
 ---
 
@@ -56,6 +70,8 @@
 | 172.31.100.25     | ID-SYNC01 | Microsoft Entra Connect Sync Server |
 | 172.31.100.71-254 | Reserved  | Future expansion                    |
 
+---
+
 ### vmbrNAT Network (192.168.100.0/24)
 
 | IP Range           | Purpose                                   |
@@ -72,13 +88,12 @@
 2. **Management Segmentation**: MGMT01 is dual-homed to manage internal systems and download updates
 3. **PAM Vault Security**: PAM01 is dual-homed to access privileged systems and external API integrations
 4. **SIEM Connectivity**: SIEM01 needs internet for threat intelligence feeds and log forwarding
-5. **Hybrid Identity Boundary**: ID-SYNC01 is the only system authorized to communicate with both the internal Active Directory environment and external Microsoft Entra ID services
+5. **Hybrid Identity Boundary**: ID-SYNC01 is the only system authorized to communicate with both internal AD and external Microsoft Entra ID services
 
 ---
 
-Document Owner: Edward E. Spence
-Environment: Fairmont Manufacturing Identity Security Lab
-Document Type: Addressing & Snapshot Allocation Register
-Operational State: Active Lab Environment
-Last Reviewed: February 2026
-
+**Document Owner:** Edward E. Spence
+**Environment:** Fairmont Manufacturing Identity Security Lab
+**Document Type:** Addressing & Snapshot Allocation Register
+**Operational State:** ✅ Active Lab Environment
+**Last Reviewed:** February 2026

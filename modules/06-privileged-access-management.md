@@ -46,7 +46,7 @@ Standard user identities are used for daily work, while **administrative identit
 
 Access flow:
 
-```id="pamflow1"
+```
 Standard User
 ↓
 Administrative Identity
@@ -68,17 +68,25 @@ Privileged identities are intentionally **excluded from cloud synchronization** 
 
 ---
 
+## Privileged Access Architecture Diagram
+
+The diagram below illustrates the privileged access control model, including administrative flow, PAM group enforcement, and the intentional exclusion of privileged identities from Entra ID synchronization.
+
+![PAM Architecture](../screenshots/module-06/module6_13_pam_architecture.png)
+
+---
+
 # PAM Security Model
 
 Privileged identities are stored in a dedicated organizational unit.
 
-```id="pamou"
+```
 Privileged-Accounts
 ```
 
 Administrative access is delegated using **PAM security groups**.
 
-```id="pamgroups"
+```
 PAM-Domain-Admins
 PAM-Server-Admins
 PAM-Security-Admins
@@ -86,7 +94,7 @@ PAM-Security-Admins
 
 Administrative identities inherit permissions through group membership.
 
-```id="pamflow2"
+```
 Administrative Identity
 ↓
 PAM Security Group
@@ -106,7 +114,7 @@ This model ensures:
 
 ## Step 1 — Privileged Accounts Organizational Unit
 
-```id="pamstep1"
+```
 Privileged-Accounts
 ```
 
@@ -114,11 +122,15 @@ Privileged-Accounts
 
 ![Privileged Accounts OU](../screenshots/module-06/module6_01_privileged_accounts_ou.png)
 
+### Control Demonstrated
+
+Privileged Identity Isolation
+
 ---
 
 ## Step 2 — Privileged Administrative Accounts
 
-```id="pamstep2"
+```
 admin.dc01
 admin.server
 admin.security
@@ -128,11 +140,15 @@ admin.security
 
 ![Privileged Accounts Created](../screenshots/module-06/module6_02_privileged_accounts_created.png)
 
+### Control Demonstrated
+
+Privileged Account Segmentation
+
 ---
 
 ## Step 3 — PAM Security Groups
 
-```id="pamstep3"
+```
 PAM-Domain-Admins
 PAM-Server-Admins
 PAM-Security-Admins
@@ -142,11 +158,15 @@ PAM-Security-Admins
 
 ![PAM Security Groups](../screenshots/module-06/module6_03_pam_security_groups.png)
 
+### Control Demonstrated
+
+Role-Based Access Control (RBAC)
+
 ---
 
 ## Step 4 — PAM Group Membership
 
-```id="pamstep4"
+```
 admin.dc01 → PAM-Domain-Admins
 admin.server → PAM-Server-Admins
 admin.security → PAM-Security-Admins
@@ -156,11 +176,15 @@ admin.security → PAM-Security-Admins
 
 ![PAM Group Membership](../screenshots/module-06/module6_04_pam_group_membership.png)
 
+### Control Demonstrated
+
+Least Privilege Enforcement
+
 ---
 
 ## Step 5 — Privilege Delegation Through Group Nesting
 
-```id="pamstep5"
+```
 PAM-Domain-Admins → Domain Admins
 ```
 
@@ -168,11 +192,15 @@ PAM-Domain-Admins → Domain Admins
 
 ![PAM Group Nesting](../screenshots/module-06/module6_05_pam_group_nesting.png)
 
+### Control Demonstrated
+
+Controlled Privilege Escalation Path
+
 ---
 
 ## Step 6 — Administrative Workstation Access
 
-```id="pamstep6"
+```
 MGMT01
 Remote Desktop Users
 ```
@@ -181,11 +209,15 @@ Remote Desktop Users
 
 ![MGMT01 RDP Permissions](../screenshots/module-06/module6_06_mgmt01_rdp_permissions.png)
 
+### Control Demonstrated
+
+Administrative Workstation Enforcement
+
 ---
 
 ## Step 7 — Administrative Login Validation
 
-```id="pamstep7"
+```
 hostname
 whoami
 ```
@@ -194,11 +226,15 @@ whoami
 
 ![Admin Login MGMT01](../screenshots/module-06/module6_07_admin_login_mgmt01.png)
 
+### Control Demonstrated
+
+Privileged Access Validation
+
 ---
 
 ## Step 8 — Privilege Boundary Validation
 
-```id="pamstep8"
+```
 CLIENT01
 ```
 
@@ -206,11 +242,15 @@ CLIENT01
 
 ![Admin Login CLIENT01](../screenshots/module-06/module6_08_admin_login_client01_gap.png)
 
+### Control Demonstrated
+
+Privilege Boundary Enforcement
+
 ---
 
 ## Step 9 — Linux Administrative Identity
 
-```id="pamstep9"
+```
 admin_server
 sudo
 ```
@@ -219,11 +259,15 @@ sudo
 
 ![Linux Account Created](../screenshots/module-06/module6_09_linux_account_created.png)
 
+### Control Demonstrated
+
+Cross-Platform Privileged Access
+
 ---
 
 ## Step 10 — Linux Privilege Validation
 
-```id="pamstep10"
+```
 sudo -l
 ```
 
@@ -231,17 +275,25 @@ sudo -l
 
 ![Linux Sudo Validation](../screenshots/module-06/module6_10_linux_sudo_validation.png)
 
+### Control Demonstrated
+
+Privilege Verification
+
 ---
 
 ## Step 11 — Privileged Access Review
 
-```id="pamstep11"
+```
 Get-ADGroupMember
 ```
 
 ### Evidence
 
 ![Privileged Access Review](../screenshots/module-06/module6_11_privileged_access_review.png)
+
+### Control Demonstrated
+
+Privileged Access Auditing
 
 ---
 
@@ -267,9 +319,6 @@ By isolating privileged identities, delegating administrative roles through PAM 
 # Next Module
 
 Module 07 introduces **IAM & PAM Logging / Incident Response**
-
----
-
 
 ---
 

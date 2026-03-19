@@ -1,3 +1,13 @@
+← [Back to Main README](../../README.md)
+
+---
+
+![Microsoft Entra ID](https://img.shields.io/badge/Microsoft_Entra_ID-0078D4?style=flat\&logo=microsoftazure\&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS_IAM-FF9900?style=flat\&logo=amazonaws\&logoColor=white)
+![SAML](https://img.shields.io/badge/SAML_2.0-Federation-orange?style=flat)
+
+---
+
 # AWS SAML Federation Incident — Missing SAML Response
 
 **Maintained by:** Edward E. Spence
@@ -7,193 +17,134 @@
 
 ---
 
+## Runbook Metadata
+
+| Field      | Value                    |
+| ---------- | ------------------------ |
+| Runbook ID | FED-OPS-INC-001          |
+| Service    | SAML Federation          |
+| Severity   | SEV-2 Federation Failure |
+| Status     | Resolved                 |
+
+---
+
+## Incident Overview
+
 **Incident Title:** AWS SAML Federation Authentication Failure
 **System:** Microsoft Entra ID ↔ AWS IAM Federation
 **Error:** "Your request did not include a SAML response."
 **Incident Type:** Identity Federation Failure
-**Status:** Resolved
 **Environment:** IAMPAM.LAB
 **Systems:** DC01, ID-SYNC01, Microsoft Entra ID, AWS IAM
-**Platform:** Proxmox VE + Microsoft Entra ID + AWS
 
 ---
 
 # Incident Summary
 
-During implementation of SAML federation between **Microsoft Entra ID** and **Amazon Web Services (AWS)**, authentication failed when attempting to access the AWS console through the **MyApps portal**.
-
-Instead of authenticating successfully, AWS returned the following error page:
+During implementation of SAML federation between **Microsoft Entra ID** and **AWS**, authentication failed when accessing the AWS console via the **MyApps portal**.
 
 > **Your request did not include a SAML response**
-
-This prevented users from accessing AWS resources through federated identity authentication.
 
 ---
 
 # Architecture Context
 
-The federation architecture for this module was designed as follows:
-
-```
+```text
 Active Directory
         ↓
-Microsoft Entra ID (Hybrid Identity)
+Microsoft Entra ID
         ↓
 SAML Federation
         ↓
 AWS IAM Identity Provider
         ↓
-AWS STS AssumeRoleWithSAML
+AWS STS
         ↓
-AWS Console Access
+AWS Console
 ```
-
-Authentication should occur entirely through **Microsoft Entra ID**, eliminating the need for locally managed AWS IAM users.
-
----
-
-# Symptoms Observed
-
-When the **AWS-Federation** application was launched from the Entra **MyApps portal**, the AWS login page displayed:
-
-```
-Amazon Web Services Sign In
-Your request did not include a SAML response
-```
-
-The failure occurred immediately after selecting the AWS application.
-
-No AWS credentials were requested because the SAML assertion was never received.
-
----
-
-# Initial Investigation
-
-Multiple potential causes were evaluated:
-
-• AWS IAM SAML Identity Provider configuration
-• AWS IAM federated role trust policy
-• SAML metadata exchange
-• Attribute and claim mapping
-• User assignment within Microsoft Entra ID
-
-All components were verified to be configured correctly.
 
 ---
 
 # Root Cause
 
-The issue was caused by a **misconfigured Sign-on URL field in the Microsoft Entra SAML configuration**.
+Misconfigured **Sign-on URL** forced SP-initiated flow:
 
-The following value had been populated:
-
-```
+```text
 https://signin.aws.amazon.com/saml
 ```
 
-This forced Microsoft Entra ID to treat the application as **Service Provider Initiated (SP-initiated) SSO**.
+Result:
 
-Under this configuration, Entra attempted to redirect authentication rather than **POSTing a SAML assertion to AWS**.
-
-Because AWS never received the SAML assertion, it returned the error indicating that the SAML response was missing.
+* Entra redirected instead of POSTing SAML assertion
+* AWS never received assertion
 
 ---
 
 # Remediation
 
-The issue was resolved by removing the **Sign-on URL** value from the SAML configuration.
+Removed Sign-on URL:
 
-Navigation path:
-
+```text
+Entra Admin Center → Enterprise Apps → AWS-Federation → SSO → Edit
 ```
-Microsoft Entra Admin Center
-Enterprise Applications
-AWS-Federation
-Single Sign-On
-Basic SAML Configuration
-Edit
-```
-
-The **Sign-on URL field was cleared completely** and the configuration was saved.
 
 ---
 
-# Why This Resolved the Issue
+# Why This Fixed It
 
-When the **Sign-on URL field is empty**, Microsoft Entra treats the application as **Identity Provider Initiated (IdP-initiated) SSO**.
+Now using **IdP-initiated flow**:
 
-This allows the MyApps portal to:
-
-1. Generate a SAML assertion
-2. POST the assertion directly to the AWS Assertion Consumer Service
-3. Allow AWS to validate the identity and issue temporary credentials
-
-This is the correct behavior for AWS console federation through the MyApps portal.
+1. Entra generates assertion
+2. POSTs to AWS
+3. AWS validates + issues credentials
 
 ---
 
 # Validation
 
-After the configuration was corrected:
+Successful login with role:
 
-• Microsoft Entra successfully generated a SAML assertion
-• AWS IAM accepted the federated authentication
-• AWS STS issued temporary role credentials
-• The AWS console loaded under the federated role
-
-Authenticated role:
-
-```
+```text
 EntraID-Federated-Admin
 ```
-
-The AWS console confirmed successful role assumption.
 
 ---
 
 # Evidence
 
-Federation configuration and validation screenshots are available in the module documentation.
+### SAML Configuration Applied
 
-Refer to:
+![SAML Configuration](../../screenshots/module-04/module4_03_saml_configuration_applied.png)
 
-```
-screenshots/module-04/
-```
+### AWS Federated Console Login Success
 
-Key evidence files include:
+![AWS Login Success](../../screenshots/module-04/module4_09_aws_federated_console_login_success.png)
 
-```
-module4_03_saml_configuration_applied.png
-module4_09_aws_federated_console_login_success.png
-module4_10_aws_role_trust_policy_saml_federation.png
-module4_11_entra_saml_claim_mapping_aws_role.png
-```
+### AWS Role Trust Policy
+
+![AWS Trust Policy](../../screenshots/module-04/module4_10_aws_role_trust_policy_saml_federation.png)
+
+### Entra SAML Claim Mapping
+
+![SAML Claims](../../screenshots/module-04/module4_11_entra_saml_claim_mapping_aws_role.png)
 
 ---
 
 # Lessons Learned
 
-This incident highlights an important behavior in **SAML federation architecture**.
-
-Incorrect IdP configuration can prevent assertion delivery even when all identity provider and service provider trust relationships are valid.
-
-When implementing SAML federation with AWS:
-
-• The **Sign-on URL field should remain blank**
-• Authentication should occur through **IdP-initiated login via the MyApps portal**
-• AWS expects a **POSTed SAML assertion** to the Assertion Consumer Service endpoint
+* Leave Sign-on URL blank for AWS
+* Use IdP-initiated flow
+* SAML must POST assertion
 
 ---
 
 # Final State
 
-After remediation:
+* Entra = IdP
+* AWS = SP
+* Federation working
+* No IAM users required
 
-• Microsoft Entra ID functions as a trusted SAML Identity Provider
-• AWS IAM accepts federated authentication from Entra
-• Users authenticate using centralized identity
-• AWS roles are assumed using STS temporary credentials
-• AWS IAM users are no longer required
+---
 
-The federation architecture is now fully operational and validated.
+**E.E. Spence — Identity Engineering | IAMPAM.LAB**

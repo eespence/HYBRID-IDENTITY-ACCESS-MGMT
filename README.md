@@ -93,19 +93,20 @@ Hybrid identity successfully synchronized and validated
 ## 📸 Validation Example
 
 ![Entra Sync Validation](screenshots/module-03/Entra-AdminUser-OnPremSync-Verified.png)
+
 ---
 
 ## 📚 Lab Modules
 
-* [Module 01 — Infrastructure & Network](modules/module-01.md)
-* [Module 02 — Active Directory Core](modules/module-02.md)
-* [Module 03 — Hybrid Identity](modules/module-03.md)
-* [Module 04 — AWS Federation](modules/module-04.md)
-* [Module 05 — Identity Governance](modules/module-05.md)
-* [Module 06 — Privileged Access Management](modules/module-06.md)
-* [Module 07 — Logging & Monitoring (Splunk)](modules/module-07.md)
-* [Module 08 — Automation & Detection](modules/module-08.md)
-* [Module 09 — Identity Security Architecture](modules/module-09.md)
+* [Module 01 — Infrastructure](https://github.com/eespence/HYBRID-IDENTITY-ACCESS-MGMT/blob/main/modules/01-infrastructure.md)
+* [Module 02 — Active Directory](https://github.com/eespence/HYBRID-IDENTITY-ACCESS-MGMT/blob/main/modules/02-active-directory.md)
+* [Module 03 — Hybrid Identity](https://github.com/eespence/HYBRID-IDENTITY-ACCESS-MGMT/blob/main/modules/03-hybrid-identity.md)
+* [Module 04 — Entra + AWS SAML Federation](https://github.com/eespence/HYBRID-IDENTITY-ACCESS-MGMT/blob/main/modules/04-entra-aws-saml-federation.md)
+* [Module 05 — Identity Governance](https://github.com/eespence/HYBRID-IDENTITY-ACCESS-MGMT/blob/main/modules/05-identity-governance.md)
+* [Module 06 — Privileged Access Management](https://github.com/eespence/HYBRID-IDENTITY-ACCESS-MGMT/blob/main/modules/06-privileged-access-management.md)
+* [Module 07 — IAM & PAM Logging / Incident Response](https://github.com/eespence/HYBRID-IDENTITY-ACCESS-MGMT/blob/main/modules/07-iam-pam-logging-incident-response.md)
+* [Module 08 — Identity Automation & Policy Enforcement](https://github.com/eespence/HYBRID-IDENTITY-ACCESS-MGMT/blob/main/modules/08-identity-automation-policy-enforcement.md)
+* [Module 09 — Documentation & Architecture](https://github.com/eespence/HYBRID-IDENTITY-ACCESS-MGMT/blob/main/modules/09-documentation-architecture.md)
 
 ---
 
@@ -126,13 +127,12 @@ Each module includes validation artifacts:
 
 ---
 
-## 🧾 Maintained By
-
 **Edward E. Spence**
 IAM / PAM Engineering | Identity Security
 
-[LinkedIn](https://linkedin.com/in/edward-e-spence-6598bb312)
+[LinkedIn](https://linkedin.com/in/edward-e-spence-6598bb312) | 
 [Portfolio](https://edwards-it-portfolio.com)
+
 
 ---
 
@@ -146,4 +146,5 @@ Active Directory, Microsoft Entra ID, AWS federation, RBAC governance, Privilege
 
 **E.E. Spence — Identity Engineering | IAMPAM.LAB**
 
+---
 

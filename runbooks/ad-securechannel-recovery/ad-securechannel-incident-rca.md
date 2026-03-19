@@ -1,3 +1,13 @@
+← [Back to Main README](../README.md)
+
+---
+
+![Active Directory](https://img.shields.io/badge/Active_Directory-0078D4?style=flat\&logo=microsoft\&logoColor=white)
+![Kerberos](https://img.shields.io/badge/Kerberos-Authentication-blue?style=flat)
+![Windows Server](https://img.shields.io/badge/Windows_Server_2022-0078D4?style=flat\&logo=windows\&logoColor=white)
+
+---
+
 # Active Directory Authentication Incident Report & Root Cause Analysis
 
 **Environment:** IAMPAM.LAB
@@ -38,9 +48,10 @@ When attempting login from a domain workstation, authentication failed with a tr
 
 ### Observed Authentication Failure
 
-![Secure Channel Failure](screenshots/01_securechannel_fail.png)
+![Secure Channel Failure](./screenshots/01_securechannel_fail.png)
 
-*File: `screenshots/01_securechannel_fail.png`*
+*File: `./screenshots/01_securechannel_fail.png`*
+
 The workstation reported it could not establish a secure trust relationship with the domain.
 
 ---
@@ -53,9 +64,10 @@ Attention shifted to the domain controller as the authentication provider.
 
 ### FSMO Role Verification
 
-![FSMO Roles](screenshots/02_fsmo_roles.png)
+![FSMO Roles](./screenshots/02_fsmo_roles.png)
 
-*File: `screenshots/02_fsmo_roles.png`*
+*File: `./screenshots/02_fsmo_roles.png`*
+
 FSMO roles were reviewed to identify the PDC Emulator, which provides the domain time authority.
 
 ---
@@ -66,9 +78,10 @@ While examining the domain controller configuration, the Windows Time Service wa
 
 ### Incorrect Time Source Discovered
 
-![Local CMOS Clock](screenshots/03_cmos_clock.png)
+![Local CMOS Clock](./screenshots/03_cmos_clock.png)
 
-*File: `screenshots/03_cmos_clock.png`*
+*File: `./screenshots/03_cmos_clock.png`*
+
 DC01 was synchronizing time using the Local CMOS Clock instead of the network NTP provider.
 
 Kerberos authentication requires synchronized time across domain members.
@@ -108,6 +121,20 @@ Actions performed:
 6. Forced time resynchronization
 7. Verified Kerberos ticket issuance
 8. Verified secure channel restoration
+
+---
+
+## 8. Validation
+
+Post-remediation validation confirmed that authentication services were fully restored and stable.
+
+Validation steps included:
+
+* Successful domain logins from CLIENT01 and MGMT01
+* Verified Kerberos ticket issuance using `klist`
+* Confirmed DC01 time synchronization with MGMT01
+* Verified no further trust relationship errors
+* Confirmed stable uptime of domain controller
 
 ---
 
@@ -151,3 +178,6 @@ The issue was therefore both:
 **Document Type:** Incident Report / Root Cause Analysis
 **Last Reviewed:** February 2026
 
+---
+
+**E.E. Spence — Identity Engineering | IAMPAM.LAB**
