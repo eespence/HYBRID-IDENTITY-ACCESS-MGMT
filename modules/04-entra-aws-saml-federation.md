@@ -1,9 +1,19 @@
+← [Back to Main README](../README.md)
+
+---
+
+![Microsoft Entra ID](https://img.shields.io/badge/Microsoft_Entra_ID-0078D4?style=flat\&logo=microsoftazure\&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS_SAML-FF9900?style=flat\&logo=amazonaws\&logoColor=white)
+![SAML 2.0](https://img.shields.io/badge/SAML-2.0-blue?style=flat)
+
+---
+
 # Module 04: Identity Federation (Microsoft Entra ID ↔ AWS SAML SSO)
 
-**Module**: 04 - Identity Federation (Microsoft Entra ID ↔ AWS IAM SAML SSO)  
-**Status**: ✅ COMPLETE (Federated Authentication Validated)  
-**Built by**: Edward E. Spence  
-**Completed**: March 2026  
+**Module**: 04 - Identity Federation (Microsoft Entra ID ↔ AWS IAM SAML SSO)
+**Status**: ✅ COMPLETE (Federated Authentication Validated)
+**Built by**: Edward E. Spence
+**Completed**: March 2026
 **Purpose**: Establish secure identity federation between Microsoft Entra ID and Amazon Web Services using SAML 2.0, allowing centralized authentication and role-based access to AWS without creating AWS IAM users.
 
 ---
@@ -232,7 +242,6 @@ The next module expands identity governance into **privileged access management 
 
 ---
 
-**Built by**: Edward E. Spence  
-**Environment**: IAMPAM.LAB  
-**Systems**: DC01, ID-SYNC01, MGMT01  
-**Platform**: Proxmox VE + Microsoft Entra ID + AWS IAM
+---
+
+**E.E. Spence — Identity Engineering | IAMPAM.LAB**

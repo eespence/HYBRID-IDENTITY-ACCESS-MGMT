@@ -1,3 +1,13 @@
+← [Back to Main README](../README.md)
+
+---
+
+![Splunk](https://img.shields.io/badge/Splunk-000000?style=flat\&logo=splunk\&logoColor=white)
+![Windows Server](https://img.shields.io/badge/Windows_Server_2022-0078D4?style=flat\&logo=windows\&logoColor=white)
+![Ubuntu](https://img.shields.io/badge/Ubuntu_22.04-E95420?style=flat\&logo=ubuntu\&logoColor=white)
+
+---
+
 # Module 07: IAM & PAM Logging / Incident Response
 
 **Module**: 07 - IAM & PAM Logging / Incident Response
@@ -39,7 +49,7 @@ This allows the identity platform to detect suspicious activity and investigate 
 
 The logging architecture integrates directly with the existing **IAMPAM.LAB identity network**.
 
-```
+```id="logflow1"
 Identity Systems
         ↓
 Splunk Universal Forwarders
@@ -84,29 +94,15 @@ This telemetry allows administrators to investigate potential identity abuse.
 
 ## Step 1 — Splunk Enterprise Installation
 
-The logging platform was deployed on **SIEM01**.
-
-Splunk Enterprise was installed and initialized to serve as the centralized log aggregation system.
-
-The Splunk Web interface was made available on port **8000**.
-
 ### Evidence
 
 ![Splunk Installation](../screenshots/module-07/module7_01_splunk_install.png)
-
-### Control Demonstrated
-
-Centralized Identity Logging Platform
 
 ---
 
 ## Step 2 — Splunk Log Receiver Configuration
 
-Splunk was configured to receive forwarded log data from identity infrastructure systems.
-
-The **Splunk Forwarding Receiver** was enabled on:
-
-```
+```id="logstep2"
 TCP 9997
 ```
 
@@ -114,139 +110,75 @@ TCP 9997
 
 ![Receiving Port 9997](../screenshots/module-07/module7_02_receiving_port_9997.png)
 
-### Control Demonstrated
-
-Secure Log Ingestion Channel
-
 ---
 
 ## Step 3 — Identity Log Index Creation
 
-Dedicated indexes were created to separate authentication telemetry.
-
-```
+```id="logstep3"
 wineventlog
 syslog
 ```
-
-This separation improves log organization and simplifies investigation.
 
 ### Evidence
 
 ![Splunk Index Creation](../screenshots/module-07/module7_03_index_creation.png)
 
-### Control Demonstrated
-
-Structured Identity Telemetry Storage
-
 ---
 
 ## Step 4 — Forwarder Deployment Staging
 
-Splunk Universal Forwarder packages were staged on **MGMT01**, which serves as the administrative staging host.
-
-The staging directory was created:
-
-```
+```id="logstep4"
 C:\Software\Splunk
 ```
-
-This location stores installation packages for Windows and Linux forwarders.
 
 ### Evidence
 
 ![Splunk Forwarder Staging](../screenshots/module-07/module7_04_mgmt01_splunk_staging.png)
 
-### Control Demonstrated
-
-Controlled Software Distribution
-
 ---
 
 ## Step 5 — Windows Forwarder Deployment
 
-Splunk Universal Forwarder was deployed to Windows systems:
-
-```
+```id="logstep5"
 DC01
 CLIENT01
 MGMT01
 ID-SYNC01
 ```
 
-The forwarder collects Windows Event Logs including:
-
-• Security
-• System
-• Application
-
-These logs contain authentication and administrative activity.
-
 ### Evidence
 
 ![Windows Forwarder Installation](../screenshots/module-07/module7_05_forwarder_install_windows.png)
-
-### Control Demonstrated
-
-Windows Authentication Telemetry Collection
 
 ---
 
 ## Step 6 — Linux Forwarder Deployment
 
-A Splunk Universal Forwarder was installed on **LINUX01** to collect authentication activity from the Linux system.
-
-The forwarder monitors:
-
-```
+```id="logstep6"
 /var/log/auth.log
 ```
-
-These logs capture:
-
-• sudo commands
-• SSH authentication
-• session creation and termination
 
 ### Evidence
 
 ![Linux Forwarder Configuration](../screenshots/module-07/module7_06_linux_forwarder_configured_and_connected.png)
 
-### Control Demonstrated
-
-Cross-Platform Identity Monitoring
-
 ---
 
 ## Step 7 — SIEM Host Visibility Verification
 
-After forwarders were deployed, Splunk queries confirmed that all identity infrastructure systems were reporting telemetry.
-
-Example search:
-
-```
+```id="logstep7"
 index=* earliest=-30m
 | stats count by host
 | sort -count
 ```
 
-This confirms active log ingestion from all monitored systems.
-
 ### Evidence
 
 ![Splunk Host Visibility](../screenshots/module-07/module7_07_splunk_host_visibility.png)
 
-### Control Demonstrated
-
-Centralized Identity Telemetry Visibility
-
 ---
 
 ## Step 8 — Windows Authentication Event Monitoring
-
-Authentication activity was verified by querying Windows event logs.
-
-Relevant security events include:
 
 | Event ID | Description      |
 | -------- | ---------------- |
@@ -254,9 +186,7 @@ Relevant security events include:
 | 4625     | Failed login     |
 | 4672     | Privileged login |
 
-Example search:
-
-```
+```id="logstep8"
 index=wineventlog earliest=-30m (EventCode=4624 OR EventCode=4625 OR EventCode=4672)
 | table _time host EventCode user Message
 ```
@@ -265,100 +195,60 @@ index=wineventlog earliest=-30m (EventCode=4624 OR EventCode=4625 OR EventCode=4
 
 ![Windows Identity Events](../screenshots/module-07/module7_08_windows_identity_events.png)
 
-### Control Demonstrated
-
-Windows Authentication Monitoring
-
 ---
 
 ## Step 9 — Linux Authentication Monitoring
 
-Authentication activity on Linux systems was verified using logs forwarded from **LINUX01**.
-
-Example query:
-
-```
+```id="logstep9"
 index=syslog host=linux01
 | table _time host source _raw
 ```
-
-These logs include:
-
-• SSH login activity
-• sudo command execution
-• session start and termination
 
 ### Evidence
 
 ![Linux Authentication Logs](../screenshots/module-07/module7_09_linux_authentication_logs.png)
 
-### Control Demonstrated
-
-Linux Privileged Activity Monitoring
-
 ---
 
 # Engineering Notes & Lessons Learned
 
-During deployment several operational issues were encountered and resolved.
-
-These engineering observations reflect real-world identity monitoring challenges.
-
 ### Windows vs Linux Forwarder Initialization
 
-Windows forwarders were installed using MSI silent installation.
-
-Linux forwarders required manual creation of the **initial Splunk administrator account** during first startup.
-
-This behavior differs between operating systems and must be accounted for in automated deployments.
+Windows forwarders used MSI silent install.
+Linux required manual first-run admin setup.
 
 ---
 
-### Configuration Files Not Automatically Created
-
-Several Splunk configuration files did not exist by default on the forwarders.
-
-The following files were manually created:
+### Config Files Not Created by Default
 
 ```
 inputs.conf
 outputs.conf
 ```
 
-These files define:
-
-• log sources to monitor
-• destination SIEM servers
+Manually created to define ingestion + forwarding.
 
 ---
 
-### PowerShell Path Execution Behavior
-
-Commands referencing paths under **Program Files** must be executed using:
+### PowerShell Execution Behavior
 
 ```
 & "path\to\executable"
 ```
 
-Without this syntax PowerShell may misinterpret commands.
+Required for Program Files paths.
 
 ---
 
-### Network Prerequisites for Remote Deployment
+### Network Prerequisites
 
-Remote software installation required several network services to be available:
-
-• SMB (TCP 445)
-• WinRM / PowerShell Remoting
-• Splunk forwarding port (9997)
-
-Firewall rules had to be enabled before remote deployment could succeed.
+• SMB (445)
+• WinRM
+• Splunk 9997
 
 ---
 
-### Forwarder Verification Methods
-
-Several techniques were used to validate correct forwarder operation:
+### Forwarder Verification
 
 Windows:
 
@@ -374,16 +264,9 @@ splunk status
 splunk list forward-server
 ```
 
-These commands confirm:
-
-• forwarder service state
-• connection to the SIEM indexer
-
 ---
 
 # Security Controls Demonstrated
-
-This module introduced identity monitoring controls across the environment.
 
 * Authentication activity monitoring
 * Failed login detection
@@ -393,8 +276,6 @@ This module introduced identity monitoring controls across the environment.
 * Cross-platform authentication visibility
 * SIEM-based investigation capability
 
-These controls provide operational visibility into identity activity across the enterprise environment.
-
 ---
 
 # Summary
@@ -403,20 +284,16 @@ Module 07 establishes **identity monitoring and incident investigation capabilit
 
 Authentication telemetry from Windows and Linux systems is centralized in Splunk Enterprise, allowing administrators to monitor login activity, detect privileged access usage, and investigate suspicious authentication behavior.
 
-With centralized logging in place, the identity platform now supports **operational detection and investigation of identity-related security events**.
-
 This completes the monitoring layer required for a mature identity security architecture.
 
 ---
 
 # Next Module
 
-Module 08 will introduce **identity automation and policy enforcement**, focusing on operational automation of identity management workflows.
+Module 08 introduces **identity automation and policy enforcement**
 
 ---
 
-**Built by**: Edward E. Spence
-**Environment**: IAMPAM.LAB
-**Systems**: DC01, MGMT01, CLIENT01, ID-SYNC01, LINUX01, SIEM01
-**Platform**: Proxmox VE | Active Directory | Microsoft Entra ID | Splunk Enterprise
+---
 
+**E.E. Spence — Identity Engineering | IAMPAM.LAB**

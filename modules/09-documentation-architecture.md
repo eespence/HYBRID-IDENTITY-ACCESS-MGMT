@@ -1,7 +1,18 @@
+← [Back to Main README](../README.md)
+
+---
+
+![Active Directory](https://img.shields.io/badge/Active_Directory-0078D4?style=flat\&logo=microsoft\&logoColor=white)
+![Microsoft Entra ID](https://img.shields.io/badge/Microsoft_Entra_ID-0078D4?style=flat\&logo=microsoftazure\&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS_SAML-FF9900?style=flat\&logo=amazonaws\&logoColor=white)
+![Splunk](https://img.shields.io/badge/Splunk-000000?style=flat\&logo=splunk\&logoColor=white)
+
+---
+
 # Module 09: Documentation & Architecture
 
 **Module:** 09 - Documentation & Architecture
-**Status:** Complete
+**Status:** ✅ COMPLETE
 **Environment:** IAMPAM.LAB
 **Repository:** HYBRID-IDENTITY-ACCESS-MGMT
 **Author:** Edward E. Spence
@@ -43,290 +54,140 @@ The resulting architecture models the identity control plane commonly used in en
 
 The infrastructure layer provides the compute, networking, and virtualization foundation upon which all identity services operate.
 
-The entire IAMPAM.LAB environment is hosted on a **Proxmox virtualization platform**, which functions as the hypervisor responsible for running all identity and security infrastructure systems. Virtualization enables network segmentation, system isolation, and flexible resource allocation which are critical for modeling enterprise environments.
+The entire IAMPAM.LAB environment is hosted on a **Proxmox virtualization platform**, which functions as the hypervisor responsible for running all identity and security infrastructure systems.
 
-The environment uses a segmented network architecture designed to separate identity infrastructure from external exposure. The primary internal identity network operates on the subnet:
+The environment uses a segmented network architecture designed to separate identity infrastructure from external exposure.
+
+Primary internal network:
 
 ```
 172.31.100.0/24
 ```
 
-This network segment hosts all identity-critical systems including the domain controller, synchronization server, administrative workstation, monitoring platform, and authentication endpoints.
-
-Several systems are dual-homed in order to support hybrid connectivity requirements. Management and synchronization systems can access external services when necessary while still operating within the controlled internal identity network.
-
-This infrastructure design mirrors enterprise environments where identity infrastructure is intentionally segmented and protected from direct exposure while still allowing controlled access to external identity providers and monitoring platforms.
-
-All higher layers of the architecture depend on this infrastructure foundation for system availability, network connectivity, and controlled administrative access.
-
-### Disaster Recovery Considerations
-
-In a production enterprise environment, this architecture would include **disaster recovery and high availability considerations** such as a secondary domain controller, SIEM redundancy, and documented recovery time objectives.
-
-These components were intentionally excluded from this simulation as the focus of **IAMPAM.LAB** is identity security architecture rather than infrastructure resilience.
-
 ---
 
 # Identity Authority Layer (Active Directory)
 
-The **Identity Authority Layer** is responsible for maintaining the authoritative source of identity objects and authentication services within the environment.
+Active Directory Domain Services on **DC01** provides:
 
-In the IAMPAM.LAB architecture, this role is fulfilled by **Active Directory Domain Services** running on the domain controller:
-
-```
-DC01
-```
-
-Active Directory provides the following core identity services:
-
-• User and group directory storage
 • Kerberos authentication
-• LDAP directory queries
-• DNS resolution for domain resources
-• Security policy enforcement
+• LDAP directory services
+• DNS resolution
+• security policy enforcement
 
-All domain identities originate in Active Directory. User accounts, security groups, and computer objects are created and managed within the directory and organized through an Organizational Unit structure designed to support governance and privilege delegation.
-
-Active Directory also functions as the **Kerberos Key Distribution Center (KDC)**, issuing authentication tickets that allow domain users and services to securely authenticate across the network.
-
-A carefully designed time hierarchy supports Kerberos authentication stability. The domain controller synchronizes time through an internal NTP relay model using **MGMT01** as the intermediary, ensuring that authentication services remain stable even in a partially isolated network environment.
-
-### Security Hardening Controls
-
-In enterprise environments, the identity authority layer is typically reinforced through domain security policies including:
-
-• **Password complexity policies** enforcing strong credential requirements
-• **Account lockout thresholds** to mitigate brute-force authentication attempts
-• **Domain audit policy configuration** to ensure authentication and privilege events are logged for monitoring systems
-
-While these controls were not the primary focus of the simulation, they represent standard hardening practices applied to production Active Directory environments.
-
-Because the identity authority layer provides authentication and directory services to all other systems, the entire architecture depends on the availability and integrity of the domain controller.
+This is the **trust anchor of the entire environment**.
 
 ---
 
 # Hybrid Identity Layer (Microsoft Entra Connect)
 
-The **Hybrid Identity Layer** extends on-premises identity into the cloud by synchronizing Active Directory identities with **Microsoft Entra ID**.
-
-This capability is implemented through the synchronization server:
+Implemented via:
 
 ```
 ID-SYNC01
 ```
 
-ID-SYNC01 runs **Microsoft Entra Connect**, which synchronizes selected identity objects from Active Directory into Microsoft Entra ID using Password Hash Synchronization.
+Key design:
 
-Synchronization is intentionally scoped using the security group:
-
-```
-AAD-Sync-Users
-```
-
-Only identities placed in this group are synchronized into the cloud directory. This design prevents the entire on-premises directory from being exposed externally and demonstrates how enterprise environments control identity exposure.
-
-Hybrid identity synchronization allows a single identity object to authenticate both internally and within cloud services while still maintaining Active Directory as the authoritative identity source.
-
-The hybrid identity layer depends directly on the identity authority layer because it synchronizes identity objects created and maintained within Active Directory.
+• Password Hash Synchronization (PHS)
+• Scoped sync using **AAD-Sync-Users**
+• Controlled identity exposure
 
 ---
 
-# Federation Layer (Microsoft Entra → AWS SAML)
+# Federation Layer (Entra → AWS SAML)
 
-The **Federation Layer** allows external service providers to trust Microsoft Entra ID as an identity provider for authentication.
+Authentication flow:
 
-Within the IAMPAM.LAB architecture this capability is demonstrated through **SAML 2.0 federation between Microsoft Entra ID and Amazon Web Services**.
+1. User authenticates to Entra
+2. SAML assertion generated
+3. AWS validates assertion
+4. STS issues temporary session
 
-Authentication follows a federated trust flow:
+Result:
 
-1. The user authenticates to Microsoft Entra ID
-2. Entra generates a signed SAML assertion
-3. AWS validates the assertion through its configured identity provider
-4. AWS Security Token Service issues a temporary role session
-
-This model eliminates the need to create separate AWS IAM users and centralizes authentication through the enterprise identity provider.
-
-Federation ensures that access to external services can be governed through the same identity lifecycle and RBAC policies used internally.
+✔ No local AWS IAM users
+✔ Centralized identity control
 
 ---
 
-# Governance Layer (RBAC and Lifecycle Controls)
+# Governance Layer (RBAC)
 
-The **Governance Layer** enforces policies controlling how identities receive and maintain access across the environment.
+Access model:
 
-Access is implemented using **Role Based Access Control (RBAC)** through Active Directory security groups.
-
-Permissions are never assigned directly to individual users. Instead, users inherit permissions through group membership.
-
-Lifecycle governance includes:
-
-• Joiner events (new account provisioning)
-• Mover events (role changes)
-• Leaver events (account termination)
-
-Lifecycle changes modify access by adjusting group membership rather than directly modifying permissions.
-
-The governance layer also enforces **Separation of Duties (SoD)** controls ensuring that conflicting roles cannot be assigned to the same user.
-
-These governance controls ensure that access remains structured, auditable, and centrally managed.
+• Group-based access (no direct assignment)
+• Joiner / Mover / Leaver lifecycle
+• Separation of Duties enforced
 
 ---
 
 # Privileged Access Management Layer
 
-The **Privileged Access Management (PAM) Layer** protects administrative privileges within the environment.
+Controls implemented:
 
-Privileged identities are isolated from standard user accounts within a dedicated Active Directory organizational unit:
-
-```
-Privileged-Accounts
-```
-
-Administrative privileges are delegated using PAM security groups:
-
-```
-PAM-Domain-Admins
-PAM-Server-Admins
-PAM-Security-Admins
-```
-
-Administrative activities originate from the controlled management workstation:
-
-```
-MGMT01
-```
-
-Privileged access extends across both Windows and Linux systems.
-
-Linux administrative access is implemented through a dedicated privileged account on:
-
-```
-LINUX01
-```
-
-which uses controlled sudo permissions to authorize elevated commands.
-
-This separation of identities significantly reduces the attack surface associated with privileged credentials.
+• Privileged-Accounts OU
+• PAM security groups
+• MGMT01 admin workstation enforcement
+• Linux sudo privilege model
 
 ---
 
-# Monitoring Layer (Splunk Logging and Telemetry)
+# Monitoring Layer (Splunk)
 
-The **Monitoring Layer** provides visibility into authentication activity and privileged access behavior.
-
-Centralized monitoring is implemented using **Splunk Enterprise** on the system:
+Central SIEM:
 
 ```
 SIEM01
 ```
 
-Authentication logs from Windows and Linux systems are forwarded using **Splunk Universal Forwarders** over:
+Data ingestion:
 
 ```
 TCP 9997
 ```
 
-Identity telemetry collected includes:
+Collected telemetry:
 
-• Windows authentication events
-• privileged login activity
-• group membership changes
-• Linux SSH authentication
-• Linux sudo command execution
-
-Centralizing this telemetry allows administrators to investigate authentication activity across the entire environment.
+• Windows logon events
+• privileged activity
+• SSH + sudo logs
 
 ---
 
-# Automation Layer (SIEM Detection and Alerting)
+# Automation Layer (Detection Engineering)
 
-The **Automation Layer** converts authentication telemetry into actionable security monitoring.
+Splunk detections identify:
 
-Splunk scheduled searches evaluate authentication events to detect suspicious behavior including:
-
-• repeated failed logins
-• suspicious authentication sequences
-• privileged account logins
-• Linux privilege escalation activity
-
-Detection rules generate alerts that simulate real security operations workflows.
-
-Automation ensures the monitoring system continuously evaluates identity activity without manual analysis.
-
----
-
-# Architecture Diagram Description
-
-The final architecture diagram referenced in the evidence section visually represents the complete identity security environment.
-
-The diagram is structured in layered zones beginning with the **Proxmox virtualization host** at the infrastructure level. Above the hypervisor layer the **privileged identity network (172.31.100.0/24)** hosts all identity infrastructure systems.
-
-The **domain controller (DC01)** is positioned as the identity authority at the center of the architecture. Connected to the domain controller are identity-dependent systems including the **management workstation (MGMT01)**, **domain client workstation (CLIENT01)**, **Linux server (LINUX01)**, and the **hybrid synchronization server (ID-SYNC01)**.
-
-The hybrid synchronization server extends identity services upward into the **Microsoft Entra ID cloud identity platform**, which then provides federated authentication to **Amazon Web Services** through SAML trust relationships.
-
-Parallel to the identity infrastructure layer sits the **SIEM monitoring platform (SIEM01)** which receives authentication telemetry from all identity systems through Splunk forwarders.
-
-The diagram visually demonstrates how identity authority, hybrid identity synchronization, federation, governance, monitoring, and detection systems operate together as a unified architecture.
+• brute force attempts
+• login anomalies
+• privileged account usage
+• Linux privilege escalation
 
 ---
 
 # Final Architecture Validation
 
-The integrated identity architecture was validated through the following operational checks:
-
-• Active Directory authentication verified on DC01
-• Domain systems successfully joined and authenticating
-• Hybrid identity synchronization confirmed through Entra Connect
-• AWS federated login validated through SAML role assumption
-• RBAC governance groups enforcing role-based access
-• Privileged access controls validated through PAM groups
-• Splunk receiving authentication telemetry from all hosts
-• Detection rules successfully generating alerts
-
-These validations confirm the architecture functions as a **complete identity security system**.
-
----
-
-# Lessons Learned and Known Limitations
-
-As a simulated architecture, IAMPAM.LAB intentionally focuses on demonstrating identity security design concepts rather than replicating every element of a production enterprise environment.
-
-Key lessons learned during the implementation include:
-
-• The importance of identity authority as the foundational trust anchor for hybrid environments
-• The operational benefits of synchronizing identity objects into cloud platforms rather than managing duplicate identity stores
-• The security improvements provided by role-based governance and privilege separation
-• The value of centralized monitoring for detecting suspicious authentication activity across multiple systems
-
-Several limitations exist within the simulated environment:
-
-• Infrastructure redundancy such as additional domain controllers and SIEM clustering were not implemented
-• Disaster recovery capabilities were not modeled
-• Identity lifecycle automation was simplified compared to enterprise identity governance platforms
-• Cloud federation was demonstrated with a single provider rather than multiple SaaS integrations
-
-**Future Phase Considerations**
-
-If this environment were expanded into a second phase, future iterations would include **multi-provider federation (such as additional SaaS integrations), automated identity lifecycle management, and deeper identity governance automation** to more closely mirror enterprise identity governance platforms.
-
-Despite these limitations, the environment accurately demonstrates the architectural principles used by enterprise organizations to design and secure identity infrastructure.
+✔ Active Directory authentication verified
+✔ Hybrid sync operational
+✔ AWS federation working
+✔ RBAC enforced
+✔ PAM controls validated
+✔ Splunk ingesting logs
+✔ Alerts triggering successfully
 
 ---
 
 # Evidence & Screenshots
-
-The following evidence demonstrates the operational architecture.
 
 | Screenshot                               | Description                                  |
 | ---------------------------------------- | -------------------------------------------- |
 | module9_01_full_architecture_diagram.png | Final architecture diagram                   |
 | module9_02_identity_flow.png             | Identity synchronization and federation flow |
 | module9_03_federated_login.png           | AWS federated login validation               |
-| module9_04_siem_visibility.png           | Splunk host telemetry visibility             |
-| module9_05_detection_alert.png           | Triggered identity detection alert           |
+| module9_04_siem_visibility.png           | Splunk telemetry visibility                  |
+| module9_05_detection_alert.png           | Detection alert triggered                    |
 
-All screenshots are stored under:
+Location:
 
 ```
 screenshots/module-09/
@@ -336,26 +197,23 @@ screenshots/module-09/
 
 # Summary
 
-Module 09 consolidates the IAMPAM.LAB environment into a fully documented enterprise identity security architecture.
+Module 09 consolidates the environment into a complete enterprise identity security architecture.
 
-The system demonstrates how modern organizations integrate:
+This system demonstrates:
 
-• On-premises identity infrastructure
-• Hybrid identity synchronization
-• Federated cloud authentication
-• Role-based governance
-• Privileged access management
-• Centralized identity monitoring
-• Automated detection and alerting
+• identity authority
+• hybrid identity
+• federation
+• governance
+• PAM
+• monitoring
+• automation
 
-Together these layers form a unified identity security control plane capable of managing authentication, enforcing access governance, monitoring identity activity, and detecting suspicious authentication behavior.
-
-The completed environment models the identity architecture used by modern enterprise organizations and serves as the architectural capstone for the **HYBRID-IDENTITY-ACCESS-MGMT** repository.
+Together forming a **real-world IAM/PAM security control plane**.
 
 ---
 
-**Built by:** Edward E. Spence
-**Environment:** IAMPAM.LAB
-**Repository:** HYBRID-IDENTITY-ACCESS-MGMT
-**Module Status:** Complete
 
+---
+
+**E.E. Spence — Identity Engineering | IAMPAM.LAB**

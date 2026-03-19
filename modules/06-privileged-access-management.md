@@ -1,3 +1,13 @@
+← [Back to Main README](../README.md)
+
+---
+
+![Active Directory](https://img.shields.io/badge/Active_Directory-0078D4?style=flat\&logo=microsoft\&logoColor=white)
+![PAM](https://img.shields.io/badge/Privileged_Access_Management-red?style=flat\&logo=microsoft\&logoColor=white)
+![Linux](https://img.shields.io/badge/Ubuntu_22.04-E95420?style=flat\&logo=ubuntu\&logoColor=white)
+
+---
+
 # Module 06: Privileged Access Management
 
 **Module**: 06 - Privileged Access Management
@@ -36,7 +46,7 @@ Standard user identities are used for daily work, while **administrative identit
 
 Access flow:
 
-```
+```id="pamflow1"
 Standard User
 ↓
 Administrative Identity
@@ -62,13 +72,13 @@ Privileged identities are intentionally **excluded from cloud synchronization** 
 
 Privileged identities are stored in a dedicated organizational unit.
 
-```
+```id="pamou"
 Privileged-Accounts
 ```
 
 Administrative access is delegated using **PAM security groups**.
 
-```
+```id="pamgroups"
 PAM-Domain-Admins
 PAM-Server-Admins
 PAM-Security-Admins
@@ -76,7 +86,7 @@ PAM-Security-Admins
 
 Administrative identities inherit permissions through group membership.
 
-```
+```id="pamflow2"
 Administrative Identity
 ↓
 PAM Security Group
@@ -96,55 +106,33 @@ This model ensures:
 
 ## Step 1 — Privileged Accounts Organizational Unit
 
-A dedicated organizational unit was created to store privileged administrative identities.
-
-```
+```id="pamstep1"
 Privileged-Accounts
 ```
-
-This organizational unit separates privileged identities from standard user accounts.
 
 ### Evidence
 
 ![Privileged Accounts OU](../screenshots/module-06/module6_01_privileged_accounts_ou.png)
 
-### Control Demonstrated
-
-Privileged Identity Isolation
-
 ---
 
 ## Step 2 — Privileged Administrative Accounts
 
-Dedicated administrative identities were created.
-
-Examples include:
-
-```
+```id="pamstep2"
 admin.dc01
 admin.server
 admin.security
 ```
 
-These accounts are used only for privileged administrative activity.
-
 ### Evidence
 
 ![Privileged Accounts Created](../screenshots/module-06/module6_02_privileged_accounts_created.png)
-
-### Control Demonstrated
-
-Privileged Identity Separation
 
 ---
 
 ## Step 3 — PAM Security Groups
 
-Privileged access groups were created to implement role-based administrative delegation.
-
-Groups created:
-
-```
+```id="pamstep3"
 PAM-Domain-Admins
 PAM-Server-Admins
 PAM-Security-Admins
@@ -154,19 +142,11 @@ PAM-Security-Admins
 
 ![PAM Security Groups](../screenshots/module-06/module6_03_pam_security_groups.png)
 
-### Control Demonstrated
-
-Privileged RBAC Delegation
-
 ---
 
 ## Step 4 — PAM Group Membership
 
-Administrative identities were assigned to their corresponding PAM roles.
-
-Example:
-
-```
+```id="pamstep4"
 admin.dc01 → PAM-Domain-Admins
 admin.server → PAM-Server-Admins
 admin.security → PAM-Security-Admins
@@ -176,45 +156,24 @@ admin.security → PAM-Security-Admins
 
 ![PAM Group Membership](../screenshots/module-06/module6_04_pam_group_membership.png)
 
-### Control Demonstrated
-
-Role-Based Privileged Access
-
 ---
 
 ## Step 5 — Privilege Delegation Through Group Nesting
 
-PAM groups were nested into privileged administrative groups.
-
-Example:
-
-```
+```id="pamstep5"
 PAM-Domain-Admins → Domain Admins
 ```
-
-This allows privileged permissions to be inherited indirectly through PAM roles.
 
 ### Evidence
 
 ![PAM Group Nesting](../screenshots/module-06/module6_05_pam_group_nesting.png)
 
-### Control Demonstrated
-
-Indirect Privileged Access Delegation
-
 ---
 
 ## Step 6 — Administrative Workstation Access
 
-Administrative identities were granted remote access to the **management workstation**.
-
-```
+```id="pamstep6"
 MGMT01
-```
-
-The following group was used:
-
-```
 Remote Desktop Users
 ```
 
@@ -222,19 +181,11 @@ Remote Desktop Users
 
 ![MGMT01 RDP Permissions](../screenshots/module-06/module6_06_mgmt01_rdp_permissions.png)
 
-### Control Demonstrated
-
-Administrative Workstation Enforcement
-
 ---
 
 ## Step 7 — Administrative Login Validation
 
-Administrative access was tested by logging into the management workstation using a privileged identity.
-
-Commands executed:
-
-```
+```id="pamstep7"
 hostname
 whoami
 ```
@@ -243,43 +194,24 @@ whoami
 
 ![Admin Login MGMT01](../screenshots/module-06/module6_07_admin_login_mgmt01.png)
 
-### Control Demonstrated
-
-Administrative Session Validation
-
 ---
 
 ## Step 8 — Privilege Boundary Validation
 
-Administrative access was tested on a standard workstation.
-
-```
+```id="pamstep8"
 CLIENT01
 ```
-
-This demonstrates the difference between administrative and standard workstation access contexts.
 
 ### Evidence
 
 ![Admin Login CLIENT01](../screenshots/module-06/module6_08_admin_login_client01_gap.png)
 
-### Control Demonstrated
-
-Privilege Boundary Awareness
-
 ---
 
 ## Step 9 — Linux Administrative Identity
 
-A privileged Linux administrative account was created.
-
-```
+```id="pamstep9"
 admin_server
-```
-
-The account was granted elevated privileges using:
-
-```
 sudo
 ```
 
@@ -287,17 +219,11 @@ sudo
 
 ![Linux Account Created](../screenshots/module-06/module6_09_linux_account_created.png)
 
-### Control Demonstrated
-
-Cross-Platform Privileged Identity Management
-
 ---
 
 ## Step 10 — Linux Privilege Validation
 
-Administrative privileges were verified using:
-
-```
+```id="pamstep10"
 sudo -l
 ```
 
@@ -305,19 +231,11 @@ sudo -l
 
 ![Linux Sudo Validation](../screenshots/module-06/module6_10_linux_sudo_validation.png)
 
-### Control Demonstrated
-
-Privileged Command Authorization
-
 ---
 
 ## Step 11 — Privileged Access Review
 
-Privileged roles must be periodically reviewed to ensure no unauthorized identities hold elevated access.
-
-Administrative groups were audited using:
-
-```
+```id="pamstep11"
 Get-ADGroupMember
 ```
 
@@ -325,15 +243,9 @@ Get-ADGroupMember
 
 ![Privileged Access Review](../screenshots/module-06/module6_11_privileged_access_review.png)
 
-### Control Demonstrated
-
-Privileged Access Governance
-
 ---
 
 # Security Controls Demonstrated
-
-This module implemented multiple privileged access protections.
 
 * Privileged Identity Isolation
 * Administrative Workstation Model
@@ -341,8 +253,6 @@ This module implemented multiple privileged access protections.
 * Cross-Platform Administrative Access
 * Privileged Access Review
 * Privileged Identity Separation from Standard Accounts
-
-These controls align with enterprise privileged access protection strategies used in modern identity architectures.
 
 ---
 
@@ -352,23 +262,15 @@ Module 06 demonstrates how privileged access is secured within a hybrid identity
 
 By isolating privileged identities, delegating administrative roles through PAM security groups, enforcing administrative workstation usage, and validating privileged access across both Windows and Linux systems, the environment ensures elevated privileges remain tightly controlled.
 
-These protections reduce the attack surface associated with privileged identities and establish a strong security foundation for enterprise identity management.
-
 ---
 
 # Next Module
 
-Module 07 introduces **IAM & PAM Logging / Incident Response**, which will implement:
-
-* identity authentication logging
-* privileged access monitoring
-* security event auditing
-* incident detection through identity signals
+Module 07 introduces **IAM & PAM Logging / Incident Response**
 
 ---
 
-**Built by**: Edward E. Spence
-**Environment**: IAMPAM.LAB
-**Systems**: DC01, MGMT01, LINUX01
-**Platform**: Proxmox VE | Active Directory | Microsoft Entra ID
 
+---
+
+**E.E. Spence — Identity Engineering | IAMPAM.LAB**

@@ -1,3 +1,13 @@
+← [Back to Main README](../README.md)
+
+---
+
+![Active Directory](https://img.shields.io/badge/Active_Directory-0078D4?style=flat\&logo=microsoft\&logoColor=white)
+![Windows Server](https://img.shields.io/badge/Windows_Server_2022-0078D4?style=flat\&logo=windows\&logoColor=white)
+![Kerberos](https://img.shields.io/badge/Kerberos-Authentication-blue?style=flat)
+
+---
+
 # Module 02: On-Premises Identity (Active Directory)
 
 **Module**: 02 - On-Premises Identity (Active Directory)
@@ -12,16 +22,23 @@
 
 This module establishes the on-premises identity foundation using Active Directory Domain Services, creating a centralized authentication and authorization platform for the IAM/PAM environment.
 
-### What You Built ✅
+---
 
-* ✅ Active Directory Domain Services installed on DC01
-* ✅ Domain created: `IAMPAM.LAB`
-* ✅ DNS configured and operational
-* ✅ Organizational Units (OUs) structure created
-* ✅ Test user accounts created
-* ✅ Computer accounts domain-joined and organized
-* ✅ Production-ready identity infrastructure
-* ✅ Enterprise-correct Kerberos time hierarchy implemented
+## 🧱 What Was Built
+
+* Active Directory Domain Services installed on DC01
+* Domain created: `IAMPAM.LAB`
+* DNS configured and operational
+* Organizational Units (OUs) structure created
+* Domain user accounts provisioned
+* Systems joined to domain
+* Enterprise-correct Kerberos time hierarchy implemented
+
+---
+
+## 📸 Validation Evidence
+
+![Kerberos TGT Validation](../screenshots/module-02/module2_kerberos_tgt_validation.png)
 
 ---
 
@@ -29,203 +46,123 @@ This module establishes the on-premises identity foundation using Active Directo
 
 ### Domain Information
 
-| Property                    | Value                              |
-| --------------------------- | ---------------------------------- |
-| **Domain Name**             | IAMPAM.LAB                         |
-| **NetBIOS Name**            | IAMPAM                             |
-| **Forest Functional Level** | Windows Server 2016 (WinThreshold) |
-| **Domain Functional Level** | Windows Server 2016 (WinThreshold) |
-| **Domain Controller**       | DC01 (172.31.100.10)               |
-| **DNS Server**              | DC01 (172.31.100.10)               |
+| Property                | Value                |
+| ----------------------- | -------------------- |
+| Domain Name             | IAMPAM.LAB           |
+| NetBIOS Name            | IAMPAM               |
+| Forest Functional Level | Windows Server 2016  |
+| Domain Functional Level | Windows Server 2016  |
+| Domain Controller       | DC01 (172.31.100.10) |
+| DNS Server              | DC01 (172.31.100.10) |
 
 ---
 
 ### Organizational Units Structure
 
-| OU Name                     | Purpose                          | Objects               |
-| --------------------------- | -------------------------------- | --------------------- |
-| **IAM-PAM-Users**           | Domain user accounts             | Admin User, Jane Doe  |
-| **IAM-PAM-Groups**          | Security and distribution groups | (Reserved for future) |
-| **IAM-PAM-ServiceAccounts** | Service account objects          | (Reserved for future) |
-| **IAM-PAM-Computers**       | Domain-joined computers          | CLIENT01, MGMT01      |
+| OU Name                 | Purpose              | Objects              |
+| ----------------------- | -------------------- | -------------------- |
+| IAM-PAM-Users           | Domain user accounts | Admin User, Jane Doe |
+| IAM-PAM-Groups          | Security groups      | Reserved             |
+| IAM-PAM-ServiceAccounts | Service identities   | Reserved             |
+| IAM-PAM-Computers       | Domain systems       | CLIENT01, MGMT01     |
 
 ---
 
-## 👥 User Accounts Created
+## 👥 User Accounts
 
-| Display Name | Username  | UPN                                                 | Location         | Status    |
-| ------------ | --------- | --------------------------------------------------- | ---------------- | --------- |
-| Admin User   | adminuser | [adminuser@iampam.lab](mailto:adminuser@iampam.lab) | OU=IAM-PAM-Users | ✅ Enabled |
-| Jane Doe     | jdoe      | [jdoe@iampam.lab](mailto:jdoe@iampam.lab)           | OU=IAM-PAM-Users | ✅ Enabled |
-
-**Password Policy**: Default domain policy (lab usage only)
+| Name       | Username  | UPN                                                 | Status |
+| ---------- | --------- | --------------------------------------------------- | ------ |
+| Admin User | adminuser | [adminuser@iampam.lab](mailto:adminuser@iampam.lab) | ✅      |
+| Jane Doe   | jdoe      | [jdoe@iampam.lab](mailto:jdoe@iampam.lab)           | ✅      |
 
 ---
 
 ## 💻 Domain-Joined Systems
 
-| Computer Name | Operating System    | IP Address    | OU Location          | Status   |
-| ------------- | ------------------- | ------------- | -------------------- | -------- |
-| **CLIENT01**  | Windows 11 Pro      | 172.31.100.30 | OU=IAM-PAM-Computers | ✅ Joined |
-| **MGMT01**    | Windows Server 2022 | 172.31.100.20 | OU=IAM-PAM-Computers | ✅ Joined |
+| System   | OS                  | IP            | Status |
+| -------- | ------------------- | ------------- | ------ |
+| CLIENT01 | Windows 11          | 172.31.100.30 | ✅      |
+| MGMT01   | Windows Server 2022 | 172.31.100.20 | ✅      |
 
 ---
 
 ## 🌐 DNS Configuration
 
-### DNS Zones Created
-
-| Zone Type      | Zone Name               | Status   |
-| -------------- | ----------------------- | -------- |
-| Forward Lookup | IAMPAM.LAB              | ✅ Active |
-| Reverse Lookup | 100.31.172.in-addr.arpa | ✅ Active |
-
-### Key DNS Records
-
-| Name                      | Type | Value           | Purpose                 |
-| ------------------------- | ---- | --------------- | ----------------------- |
-| DC01                      | A    | 172.31.100.10   | Domain Controller       |
-| _ldap._tcp.IAMPAM.LAB     | SRV  | DC01.IAMPAM.LAB | LDAP service location   |
-| _kerberos._tcp.IAMPAM.LAB | SRV  | DC01.IAMPAM.LAB | Kerberos authentication |
-| _gc._tcp.IAMPAM.LAB       | SRV  | DC01.IAMPAM.LAB | Global Catalog          |
-
----
-
-## 🔧 Implementation Summary
-
-Active Directory Domain Services was installed and DC01 promoted to the first domain controller in a new forest (IAMPAM.LAB). DNS was automatically configured during promotion and verified operational. Organizational Units were created to support role separation and future delegation. Domain users and computer objects were created and organized accordingly. CLIENT01 and MGMT01 successfully joined the domain.
-
----
-
-## 🔍 Testing & Validation
-
-### Domain Membership Verification
-
-```
-systeminfo | findstr /C:"Domain"
-Expected:
-Domain: IAMPAM.LAB
-```
-
-### DNS Resolution
-
-```
-nslookup IAMPAM.LAB
-nslookup DC01.IAMPAM.LAB
-```
-
-Both commands successfully resolved to 172.31.100.10.
+| Zone                    | Type    | Status |
+| ----------------------- | ------- | ------ |
+| IAMPAM.LAB              | Forward | ✅      |
+| 100.31.172.in-addr.arpa | Reverse | ✅      |
 
 ---
 
 ## 🔐 Kerberos Authentication Validation
 
-After resolving a domain controller authentication instability, domain authentication was verified by obtaining a Kerberos Ticket Granting Ticket (TGT).
+Authentication was validated through successful Kerberos Ticket Granting Ticket (TGT) issuance.
 
-The AdminUser domain account successfully authenticated to DC01 and received a valid `krbtgt` ticket.
+This confirms:
 
-The ticket shows the Key Distribution Center (KDC) as **DC01.IAMPAM.LAB**, confirming:
-
-• Secure channel communication
-• Kerberos ticket issuance
-• Functional domain authentication
-• Time synchronization within Kerberos tolerance
-
-This is the authoritative proof that Active Directory authentication services are operational.
+* Domain trust is intact
+* Secure channel is operational
+* KDC (DC01) is functioning correctly
+* Authentication pipeline is stable
 
 ---
 
-## ⏱️ Active Directory Time Hierarchy (Critical Infrastructure Correction)
+## ⏱️ Critical Incident — Kerberos Time Drift
 
-During validation, a Kerberos secure channel instability was identified. Investigation revealed that **DC01 (PDC Emulator) was operating on Local CMOS Clock due to absence of an authoritative upstream time source.**
-
-In virtualized Active Directory environments, reliance on Local CMOS Clock can cause Kerberos timestamp validation failures due to drift and lack of hierarchical synchronization.
+During validation, authentication failures were observed due to time desynchronization.
 
 ### Root Cause
 
-The PDC Emulator (DC01) did not have a reachable external time authority. Because the lab network is isolated, DC01 had no upstream NTP server. As a result, Windows Time Service defaulted to Local CMOS Clock, which caused authentication instability.
+DC01 (PDC Emulator) defaulted to:
 
-Kerberos authentication requires timestamp validation within strict tolerance. Without a trusted time source, the secure channel between domain members and the domain controller becomes unreliable.
-
----
-
-## 🏗️ Implemented Time Synchronization Architecture
-
-An internal time hierarchy was implemented while preserving network isolation.
-
-```
-Internet NTP (pool.ntp.org)
-        ↓
-MGMT01 (172.31.100.20) – Internal NTP Relay
-        ↓
-DC01 (172.31.100.10) – PDC Emulator / Domain Time Authority
-        ↓
-Domain Members (CLIENT01)
-```
-
-### Design Principles
-
-• DC01 remains isolated from internet access
-• MGMT01 acts as dual-homed management and NTP relay server
-• PDC Emulator becomes authoritative time source for domain
-• Hypervisor time provider disabled
-• Windows Time Service configured in NTP mode
+* **Local CMOS Clock**
+* No upstream time source
+* Result: Kerberos ticket rejection
 
 ---
 
-## 🔧 Final Validated Configuration
+## 🏗️ Implemented Time Architecture
+
+```
+Internet NTP
+     ↓
+MGMT01 (NTP Relay)
+     ↓
+DC01 (PDC Emulator)
+     ↓
+Domain Members
+```
+
+---
+
+## 🔧 Validated Configuration
 
 ### MGMT01
-
-MGMT01 synchronizes with external NTP servers:
 
 ```
 w32tm /query /source
 pool.ntp.org
 ```
 
----
-
 ### DC01
-
-DC01 synchronizes with MGMT01:
 
 ```
 w32tm /query /source
 172.31.100.20,0x8
 ```
 
-```
-w32tm /query /configuration
-NtpServer: 172.31.100.20,0x8
-Type: NTP
-AnnounceFlags: 5
-VMICTimeProvider: Disabled
-```
-
 ---
 
-### Validation Results
+## ✅ Final State
 
-• DC01 successfully synchronizing from MGMT01
-• MGMT01 synchronizing from external NTP
-• Domain members synchronizing from DC01
-• Kerberos ticket issuance stable
-• Secure channel verification successful
-• Time offset within acceptable Kerberos tolerance
-
----
-
-## 📊 Configuration Summary
-
-| Component         | Configuration    | Status        |
-| ----------------- | ---------------- | ------------- |
-| Domain Controller | DC01             | ✅ Operational |
-| DNS               | AD Integrated    | ✅ Resolving   |
-| Domain            | IAMPAM.LAB       | ✅ Functional  |
-| Domain Members    | CLIENT01, MGMT01 | ✅ Joined      |
-| Authentication    | Kerberos         | ✅ Verified    |
-| Time Hierarchy    | Internal NTP     | ✅ Stable      |
+| Component      | Status        |
+| -------------- | ------------- |
+| Domain         | ✅ Operational |
+| DNS            | ✅ Resolving   |
+| Authentication | ✅ Stable      |
+| Kerberos       | ✅ Verified    |
+| Time Sync      | ✅ Corrected   |
 
 ---
 
@@ -233,44 +170,34 @@ VMICTimeProvider: Disabled
 
 * Active Directory deployment
 * Domain join operations
-* DNS for directory services
-* OU design and organization
-* Authentication verification
-* Identity infrastructure validation
-* Troubleshooting authentication failures
-* Kerberos time synchronization troubleshooting
-* Enterprise time hierarchy design
+* DNS configuration
+* OU design
+* Kerberos troubleshooting
+* Time hierarchy engineering
+* Root cause analysis (identity failure)
 
 ---
 
-## 🔐 Security & Operational Notes
+## 🔐 Engineering Insight
 
-The environment now provides a stable identity provider for future IAM and PAM integrations.
+This module demonstrates a **real-world identity failure scenario**:
 
-All authentication in Active Directory depends on:
+Authentication did not fail due to configuration —
+it failed due to **time authority design**, a common enterprise issue.
 
-• DNS resolution
-• Domain controller availability
-• FSMO role operation
-• **Authoritative time hierarchy (Kerberos dependency)**
+Fixing this required understanding:
 
-Time synchronization is implemented using an internal NTP relay model to preserve isolation while maintaining enterprise-grade authentication stability.
+* FSMO roles
+* Kerberos dependency on time
+* Network isolation constraints
+* Internal NTP relay architecture
 
 ---
-
 
 ## 🚀 Next Module
 
-Module 03 will extend identity into hybrid identity by synchronizing on-premises Active Directory with cloud identity (Microsoft Entra ID).
+Module 03 extends identity into hybrid architecture using Microsoft Entra ID synchronization.
 
 ---
 
-**Built by**: Edward E. Spence
-**Environment**: IAMPAM.LAB
-**Systems**: DC01, MGMT01, CLIENT01
-**Platform**: Proxmox VE
-
----
-
-*Active Directory authentication infrastructure operational and validated.*
-
+**E.E. Spence — Identity Engineering | IAMPAM.LAB**

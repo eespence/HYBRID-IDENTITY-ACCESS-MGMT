@@ -1,211 +1,175 @@
+← [Back to Main README](../README.md)
+
+---
+
+![Active Directory](https://img.shields.io/badge/Active_Directory-0078D4?style=flat\&logo=microsoft\&logoColor=white)
+![RBAC](https://img.shields.io/badge/RBAC-Governance-blue?style=flat)
+![Splunk](https://img.shields.io/badge/Splunk-000000?style=flat\&logo=splunk\&logoColor=white)
+
+---
+
 # Identity Lifecycle Operations – Fairmont Manufacturing
 
-This document defines how digital identities are requested, approved, provisioned, monitored, modified, and revoked within the simulated Fairmont Manufacturing enterprise environment.
-
-The lab models operational Identity and Privileged Access Management (IAM/PAM) responsibilities performed by identity administrators and security operations teams.
-
-Primary Test Identity
-Jane Doe — Finance Department Employee
-
-The same identity is intentionally used across all modules to demonstrate continuous lifecycle management rather than isolated technical tasks.
+**Status:** ✅ COMPLETE
+**Environment:** IAMPAM.LAB
+**Scope:** IAM / PAM Operational Lifecycle
 
 ---
 
-## Access Governance Model
+## Evidence Mapping
 
-Identity administration follows a role-based access control (RBAC) model.
-
-Access is never granted directly to an individual user unless required for troubleshooting.
-Users receive permissions through security group membership mapped to job function.
-
-Provisioning requires:
-• a documented request
-• management approval
-• identity administrator action
-• authentication validation
-
-All lifecycle actions are auditable.
+| Lifecycle Phase   | Evidence Source        |
+| ----------------- | ---------------------- |
+| Onboarding        | Module 05 — Governance |
+| Privileged Access | Module 06 — PAM        |
+| Role Changes      | Module 05 — Governance |
+| Access Review     | Module 05 — Governance |
+| Monitoring        | Module 07 — Splunk     |
+| Offboarding       | Module 05 — Governance |
 
 ---
 
-## Access Request & Approval (Pre-Provisioning)
+## Overview
 
-Before any account is created, an access request must exist.
+This document defines how identities are **requested, provisioned, monitored, modified, and revoked** across the environment.
 
-Simulated process:
+Primary Identity:
 
-1. Hiring manager submits an access request
-2. Request includes employee role and department
-3. Identity administrator verifies required access
-4. Account is provisioned based on role, not preference
-
-Purpose:
-Demonstrates separation of duties and controlled identity provisioning.
-
-Operational Control:
-No account is created without an approval record.
+**Jane Doe — Finance Department Employee**
 
 ---
 
-## 1. Onboarding (Joiner)
+# Access Governance Model
 
-When a new employee is hired, an account is provisioned in Active Directory.
-
-Steps performed:
-• Create user account in the IAM-PAM-Users organizational unit
-• Assign baseline role-based security groups
-• Configure initial password and first login requirement
-• Validate workstation authentication from CLIENT01
-
-Operational Validation:
-The employee must successfully log in to a domain-joined workstation and receive a Kerberos authentication ticket from the domain controller (DC01).
-
-Simulated Issue:
-The employee was unable to access department resources due to incorrect group membership.
-
-Resolution:
-Group assignment was corrected and access was verified.
-
-Purpose:
-Demonstrates controlled provisioning and authentication validation.
+| Control Area      | Implementation     | Status |
+| ----------------- | ------------------ | ------ |
+| RBAC              | Group-Based Access | ✅      |
+| Direct Assignment | Restricted         | ✅      |
+| Approval Workflow | Required           | ✅      |
+| Audit Logging     | Enabled            | ✅      |
 
 ---
 
-## 2. Privileged Access Assignment (PAM Function)
+# Lifecycle Summary
 
-Certain tasks require temporary administrative privileges.
-
-Procedure:
-• User requests elevated access for a specific task
-• Administrator grants membership in administrative group
-• Privileged access is performed from MGMT01
-• Access is removed after task completion
-
-Security Control:
-Privileged access is time-limited and reviewed.
-
-Simulated Issue:
-Administrative permissions remained assigned longer than intended.
-
-Resolution:
-Administrative group membership was removed and verified.
-
-Purpose:
-Demonstrates least-privilege administration and privileged access management concepts.
+| Phase      | Action               | Validation                  | Status |
+| ---------- | -------------------- | --------------------------- | ------ |
+| Joiner     | Account created      | Access validated            | ✅      |
+| PAM Access | Admin access granted | MGMT01 login                | ✅      |
+| Mover      | Role reassigned      | Old access removed          | ✅      |
+| Review     | Access audited       | Unauthorized access removed | ✅      |
+| Monitoring | Events logged        | Splunk visibility           | ✅      |
+| Leaver     | Account disabled     | Login failure               | ✅      |
 
 ---
 
-## 3. Role Change (Mover)
+# 1. Onboarding (Joiner)
 
-Employees may transfer departments requiring new access.
+### Validation
 
-Scenario:
-Jane Doe transfers from Finance to IT.
+• User account created
+• Role-based access assigned
+• Access validated
 
-Required Actions:
-• Remove previous department access
-• Assign new role-based groups
-• Validate authentication to new resources
-• Confirm previous access no longer works
+![Joiner User Created](../screenshots/module-05/module5_03_joiner_user_created.png)
 
-Simulated Issue:
-The user retained access to previous department resources.
-
-Resolution:
-Legacy group membership removed and access retested.
-
-Purpose:
-Demonstrates excessive privilege prevention.
+**Status:** ✅ VERIFIED
 
 ---
 
-## 4. Periodic Access Review
+# 2. Privileged Access (PAM)
 
-Access must be reviewed regularly to detect incorrect permissions.
+### Validation
 
-Process:
-• Manager reviews department group memberships
-• Incorrect access is identified
-• Access is removed and documented
+• Admin login from MGMT01
+• Privileged group enforcement
 
-Simulated Event:
-Finance manager review showed Jane Doe retained IT permissions.
+![Admin Login MGMT01](../screenshots/module-06/module6_07_admin_login_mgmt01.png)
 
-Resolution:
-Group membership removed and authentication verified.
-
-Purpose:
-Demonstrates access certification and governance controls.
+**Status:** ✅ VERIFIED
 
 ---
 
-## 5. Authentication Security Event Monitoring
+# 3. Role Change (Mover)
 
-Authentication activity is monitored for unusual behavior.
+### Validation
 
-Scenario:
-Unexpected login occurred outside normal working hours.
+• Role transition completed
+• Access updated correctly
 
-Actions Taken:
-• Review authentication logs
-• Verify user activity
-• Reset password
-• Require re-authentication
+![Mover Role Change](../screenshots/module-05/module5_05_mover_role_change.png)
 
-All authentication events are logged and traceable to an account.
-
-Purpose:
-Demonstrates credential protection and account security response.
+**Status:** ✅ VERIFIED
 
 ---
 
-## 6. Offboarding (Leaver)
+# 4. Periodic Access Review
 
-When an employee leaves the company, access must be revoked immediately.
+### Validation
 
-Procedure:
-• Disable Active Directory account
-• Invalidate active sessions
-• Confirm authentication failure
-• Review authentication logs
+• Privileged access reviewed
+• Unauthorized access removed
 
-Validation:
-The user can no longer authenticate to domain systems.
+![Privileged Access Review](../screenshots/module-05/module5_07_privileged_access_review.png)
 
-Purpose:
-Demonstrates termination controls and identity revocation.
+**Status:** ✅ VERIFIED
 
 ---
 
-## Audit Logging & Accountability
+# 5. Authentication Monitoring
 
-All lifecycle actions are logged, including:
+### Validation
 
-• account creation
-• group membership changes
-• privilege elevation
-• authentication attempts
-• account disablement
+• Authentication events visible in SIEM
+• Cross-system logging confirmed
 
-Each action is traceable to an administrative account to ensure accountability and non-repudiation.
+![Windows Identity Events](../screenshots/module-07/module7_08_windows_identity_events.png)
 
----
-
-## Operational Goal
-
-This environment is used to practice identity administration, privilege control, and authentication monitoring as performed in a real organization.
-
-The objective is ensuring:
-
-• the correct users have access
-• excessive privileges are removed
-• authentication is auditable
-• administrative access is controlled
-• access is revoked when no longer required
+**Status:** ✅ VERIFIED
 
 ---
 
-Maintained by: Edward E. Spence
-Identity Security Documentation: E.E. Spence
-Last Reviewed: February 2026
+# 6. Offboarding (Leaver)
 
+### Validation
+
+• Account disabled
+• Access revoked
+• Authentication blocked
+
+![Leaver Account Disabled](../screenshots/module-05/module5_06_leaver_account_disabled.png)
+
+**Status:** ✅ VERIFIED
+
+---
+
+# Audit Logging & Accountability
+
+| Event Type          | Logged | Source           |
+| ------------------- | ------ | ---------------- |
+| Account Creation    | ✅      | Active Directory |
+| Group Changes       | ✅      | AD + Splunk      |
+| Privilege Elevation | ✅      | PAM              |
+| Authentication      | ✅      | Splunk           |
+| Account Disablement | ✅      | AD               |
+
+---
+
+# Final Outcome
+
+This lifecycle demonstrates:
+
+• Identity provisioning
+• Privilege control
+• Access governance
+• Monitoring and detection
+• Secure deprovisioning
+
+---
+
+**Maintained by:** Edward E. Spence
+**Environment:** IAMPAM.LAB
+
+---
+
+**E.E. Spence — Identity Engineering | IAMPAM.LAB**
