@@ -50,7 +50,7 @@ This environment is aligned to:
 
 Detailed mappings are provided in:
 
-➡️ [`grc-framework-mapping.md`](./grc-framework-mapping.md)
+➡️ [grc-framework-mapping.md](./grc-framework-mapping.md)
 
 ---
 
