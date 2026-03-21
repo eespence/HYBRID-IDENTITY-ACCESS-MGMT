@@ -1,0 +1,4 @@
+FirstName,LastName,Username,Password,OU,Groups
+Alicia,Grant,agrant,Password123!,"OU=IAM-PAM-Users,DC=IAMPAM,DC=LAB",ENG-Users;AAD-Sync-Users
+Brian,Carter,bcarter,Password123!,"OU=IAM-PAM-Users,DC=IAMPAM,DC=LAB",IT-Admins;AAD-Sync-Users
+Naomi,Reid,nreid,Password123!,"OU=IAM-PAM-Users,DC=IAMPAM,DC=LAB",FIN-Users;AAD-Sync-Users

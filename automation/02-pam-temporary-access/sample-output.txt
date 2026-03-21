@@ -1,0 +1,27 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20260320232716
+Username: IAMPAM\Administrator
+RunAs User: IAMPAM\Administrator
+Configuration Name: 
+Machine: MGMT01 (Microsoft Windows NT 10.0.20348.0)
+Host Application: powershell
+Process ID: 7924
+PSVersion: 5.1.20348.4294
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.20348.4294
+BuildVersion: 10.0.20348.4294
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is .\sample-output.txt
+PS C:\Users\Administrator.IAMPAM\Downloads> .\temp-admin.ps1
+[INFO] Processing bcarter
+[WARNING] bcarter already in PAM-Server-Admins - skipping
+PS C:\Users\Administrator.IAMPAM\Downloads> Stop-Transcript
+**********************
+Windows PowerShell transcript end
+End time: 20260320232732
+**********************
