@@ -29,7 +29,7 @@ This module establishes a dedicated, isolated IAM/PAM network environment on Pro
 
 * Dedicated network `172.31.100.0/24` on vmbrPAM
 * NAT network `192.168.100.0/24` on vmbrNAT
-* 6 virtual machines (VM IDs 3000-3005)
+* 7 virtual machines (VM IDs 3000-3005)
 * Network isolation and segmentation design
 * Baseline snapshots on all systems
 * Connectivity validation across all VMs
@@ -76,7 +76,7 @@ This module establishes a dedicated, isolated IAM/PAM network environment on Pro
 | 3003  | LINUX01  | 172.31.100.40 | Ubuntu 22.04 LTS    | ✅      |
 | 3004  | PAM01    | Dual NIC      | Ubuntu 22.04 LTS    | ✅      |
 | 3005  | SIEM01   | Dual NIC      | Ubuntu 22.04 LTS    | ✅      |
-
+| 3999  |ID-SYNC01 | Dual NIC      | Windows Server 2022 | ✅      |
 ---
 
 ## 📚 Supporting Documentation
@@ -98,7 +98,7 @@ This module establishes a dedicated, isolated IAM/PAM network environment on Pro
 
 ### VM Deployment
 
-* [x] 6 VMs provisioned
+* [x] 7 VMs provisioned
 * [x] OS installation completed
 * [x] Network configuration validated
 
