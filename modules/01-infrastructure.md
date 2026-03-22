@@ -29,7 +29,7 @@ This module establishes a dedicated, isolated IAM/PAM network environment on Pro
 
 * Dedicated network `172.31.100.0/24` on vmbrPAM
 * NAT network `192.168.100.0/24` on vmbrNAT
-* 7 virtual machines (VM IDs 3000-3005)
+* 7 virtual machines (VM IDs 3000-3005 & 3999)
 * Network isolation and segmentation design
 * Baseline snapshots on all systems
 * Connectivity validation across all VMs
