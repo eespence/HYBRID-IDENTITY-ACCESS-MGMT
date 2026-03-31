@@ -23,6 +23,21 @@ Active Directory remains the identity authority while Microsoft Entra ID enables
 
 ---
 
+## Incident Summary
+
+During Microsoft Entra Connect configuration on ID-SYNC01, authentication to Microsoft Entra ID failed during the sign-in phase required to establish the synchronization relationship.
+
+The failure occurred despite:
+
+* Successful domain join
+* Valid administrative credentials
+* Network connectivity to Microsoft services
+* All prerequisite validation checks passing
+
+The error presented was misleading and did not accurately reflect the underlying issue, requiring further investigation into identity configuration rather than system or application faults.
+
+---
+
 ## Root Cause (Incident)
 
 ```
