@@ -20,9 +20,11 @@
 </p>
 
 ---
+
 9-module enterprise identity lab covering Active Directory, Microsoft Entra ID, AWS SAML federation, PAM-aligned privileged access controls, and Splunk monitoring.
 
 Built under real failure conditions — authentication broke, was diagnosed, repaired, and documented with operational evidence.
+
 ---
 
 ## 🧠 Overview
