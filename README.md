@@ -1,16 +1,28 @@
-# 🎯 Enterprise Identity Security Lab (IAM / PAM)
+<p align="center">
+  <img src="./branding/FM-Horizontal-Cropped.png" width="650">
+</p>
 
-9-module enterprise identity lab covering Active Directory, Microsoft Entra ID, AWS SAML, PAM, and Splunk.
-Built under real failure conditions — authentication broke, was diagnosed, and repaired.
-Each module is validated with screenshots and operational evidence.
+<h1 align="center">Enterprise Identity Security Lab</h1>
+
+<p align="center">
+  <strong>Hybrid Identity Access Management | IAMPAM.LAB</strong>
+</p>
+
+<p align="center">
+  <em>Fairmont Manufacturing — Precision. Security. Mission Success.</em>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Active_Directory-0078D4?style=flat&logo=microsoft&logoColor=white">
+  <img src="https://img.shields.io/badge/Microsoft_Entra_ID-0078D4?style=flat&logo=microsoftazure&logoColor=white">
+  <img src="https://img.shields.io/badge/AWS_SAML-FF9900?style=flat&logo=amazonaws&logoColor=white">
+  <img src="https://img.shields.io/badge/Splunk-000000?style=flat&logo=splunk&logoColor=white">
+</p>
 
 ---
+9-module enterprise identity lab covering Active Directory, Microsoft Entra ID, AWS SAML federation, PAM-aligned privileged access controls, and Splunk monitoring.
 
-![Active Directory](https://img.shields.io/badge/Active_Directory-0078D4?style=flat\&logo=microsoft\&logoColor=white)
-![Microsoft Entra ID](https://img.shields.io/badge/Microsoft_Entra_ID-0078D4?style=flat\&logo=microsoftazure\&logoColor=white)
-![AWS SAML](https://img.shields.io/badge/AWS_SAML-FF9900?style=flat\&logo=amazonaws\&logoColor=white)
-![Splunk](https://img.shields.io/badge/Splunk-000000?style=flat\&logo=splunk\&logoColor=white)
-
+Built under real failure conditions — authentication broke, was diagnosed, repaired, and documented with operational evidence.
 ---
 
 ## 🧠 Overview
