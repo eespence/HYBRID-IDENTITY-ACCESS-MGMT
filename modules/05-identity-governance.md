@@ -18,6 +18,25 @@
 
 ---
 
+## Tenant Governance Note
+
+During the lifecycle of this project, the original Microsoft Entra tenant experienced an administrative recovery issue that affected access to cloud-based administrative functions.
+
+To maintain operational continuity and preserve governance objectives, a replacement Microsoft Entra tenant was established under Fairmont Manufacturing LLC.
+
+The underlying hybrid identity architecture, Active Directory environment, governance controls, synchronization model, RBAC implementation, and lifecycle management processes remained unchanged.
+
+This adjustment provided an opportunity to implement additional governance safeguards, including:
+
+* Dedicated cloud administration accounts
+* Emergency break-glass administrator accounts
+* Multi-factor authentication recovery controls
+* Administrative account separation controls
+
+These improvements are documented within Step 9 of this module.
+
+---
+
 ## Overview
 
 Module 05 implements **Identity Governance** controls within the hybrid identity environment established in the previous modules.
@@ -175,15 +194,57 @@ Get-ADGroupMember IT-Admins
 
 ![module5\_08\_sod\_enforcement](../screenshots/module-05/module5_08_sod_enforcement.png)
 
+
+---
+
+## Step 9 — Administrative Resilience and Emergency Access Governance
+
+During ongoing hybrid identity operations, an administrative recovery incident highlighted the importance of dedicated emergency access controls, recovery planning, and administrative account separation.
+
+To strengthen identity governance and reduce the risk of tenant-level administrative lockout, the following controls were implemented:
+
+* Dedicated operational cloud administration account (Hybrid-CloudAdmin)
+* Primary emergency Global Administrator account (Hybrid-Breakglass01)
+* Secondary emergency Global Administrator account (Hybrid-Breakglass02)
+* Multi-factor authentication (MFA) enrollment for emergency access accounts
+* Independent recovery methods utilizing Microsoft Authenticator and phone-based recovery
+* Administrative account separation between operational and emergency access functions
+
+The implementation of dedicated emergency access accounts ensures that administrative recovery paths remain available during authentication failures, account compromise investigations, credential recovery events, or administrative access disruptions.
+
+These controls align with enterprise identity governance best practices by establishing resilient administrative access mechanisms, reducing single points of failure, and supporting continuity of operations within the hybrid identity environment.
+
+
+### Evidence
+
+![module5\_09\_cloudadmin\_global\_admin\_validation](../screenshots/module-05/module5_09_cloudadmin_global_admin_validation.png)
+
+![module5\_10\_breakglass01\_mfa\_configuration](../screenshots/module-05/module5_10_breakglass01_mfa_configuration.png)
+
+![module5\_11\_breakglass02\_recovery\_configuration](../screenshots/module-05/module5_11_breakglass02_recovery_configuration.png)
+
+
+
 ---
 
 # Security Controls Demonstrated
 
 RBAC Governance
+
 Hybrid Identity Synchronization
+
 Identity Lifecycle Management (Joiner / Mover / Leaver)
+
 Privileged Access Review
+
 Separation of Duties Enforcement
+
+Administrative Resilience
+
+Emergency Access Governance
+
+Multi-Factor Authentication Governancet
+
 
 ---
 
@@ -197,13 +258,15 @@ Through RBAC group design, lifecycle management, and governance auditing, the sy
 
 ## 📊 Final Status
 
-| Control                  | Status         |
-| ------------------------ | -------------- |
-| RBAC Groups              | ✅ Implemented  |
-| Hybrid Sync              | ✅ Validated    |
-| Joiner/Mover/Leaver      | ✅ Demonstrated |
-| Privileged Access Review | ✅ Complete     |
-| Separation of Duties     | ✅ Enforced     |
+| Control                                | Status         |
+| -------------------------------------- | -------------- |
+| RBAC Groups                            | ✅ Implemented |
+| Hybrid Sync                            | ✅ Validated |
+| Joiner/Mover/Leaver                    | ✅ Demonstrated |
+| Privileged Access Review               | ✅ Complete |
+| Separation of Duties                   | ✅ Enforced |
+| Emergency Access Governance            | ✅ Implemented |
+| Administrative Resilience Controls     | ✅ Implemented |
 
 ---
 

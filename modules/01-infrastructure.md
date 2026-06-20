@@ -157,9 +157,6 @@ Next phase:
 
 ---
 
-**Module Status**: ✅ COMPLETE
-**Duration**: 2 Days
-
 ---
 
 **E.E. Spence — Identity Engineering | IAMPAM.LAB**
