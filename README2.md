@@ -1,6 +1,7 @@
 <p align="center">
-  <img src="./branding/FM-Horizontal.png" width="700">
+  <img src="./branding/FM-Horizontal-Cropped.png" width="650">
 </p>
+
 <h1 align="center">Enterprise Identity Security Lab</h1>
 
 <p align="center">
